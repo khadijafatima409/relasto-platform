@@ -154,6 +154,7 @@ AUTH_USER_MODEL = 'accounts.User'
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',   # Vite dev server
+    'http://localhost:5174',   # Vite dev server alternate
 ]
 
 MEDIA_URL = '/media/'

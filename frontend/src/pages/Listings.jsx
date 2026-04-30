@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -8,20 +8,28 @@ export default function Listings() {
   const [properties, setProperties] = useState([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
+  const [page, setPage] = useState(1);
+  const [inputFilters, setInputFilters] = useState({
     search: "",
     property_type: "",
     status: "",
     city: "",
   });
-  const [page, setPage] = useState(1);
+  const [appliedFilters, setAppliedFilters] = useState({
+    search: "",
+    property_type: "",
+    status: "",
+    city: "",
+  });
 
-  const fetchProperties = async () => {
+  // useCallback prevents fetchProperties from being
+  // recreated on every render — stable reference
+  const fetchProperties = useCallback(async () => {
     setLoading(true);
     try {
       const params = {
         page,
-        ...Object.fromEntries(Object.entries(filters).filter(([, v]) => v)),
+        ...Object.fromEntries(Object.entries(appliedFilters).filter(([, v]) => v)),
       };
       const { data } = await api.get("/properties/", { params });
       setProperties(data.results);
@@ -31,29 +39,35 @@ export default function Listings() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, appliedFilters]);
 
   useEffect(() => {
     fetchProperties();
-  }, [page, filters]);
+  }, [fetchProperties]);
+
+  const handleSearch = () => {
+    setAppliedFilters(inputFilters);
+    setPage(1);
+  };
 
   return (
     <div>
       <Navbar />
+
       {/* Search bar */}
-      <div className="bg-brand-light py-8 px-6">
+      <div className="bg-orange-50 py-8 px-6">
         <div className="max-w-4xl mx-auto flex flex-wrap gap-3">
           <input
             className="border px-4 py-2 rounded-lg text-sm flex-1"
             placeholder="City / Street"
-            value={filters.city}
-            onChange={(e) => setFilters({ ...filters, city: e.target.value })}
+            value={inputFilters.city}
+            onChange={(e) => setInputFilters({ ...inputFilters, city: e.target.value })}
           />
           <select
             className="border px-4 py-2 rounded-lg text-sm"
-            value={filters.property_type}
+            value={inputFilters.property_type}
             onChange={(e) =>
-              setFilters({ ...filters, property_type: e.target.value })
+              setInputFilters({ ...inputFilters, property_type: e.target.value })
             }
           >
             <option value="">All Types</option>
@@ -64,15 +78,15 @@ export default function Listings() {
           </select>
           <select
             className="border px-4 py-2 rounded-lg text-sm"
-            value={filters.status}
-            onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+            value={inputFilters.status}
+            onChange={(e) => setInputFilters({ ...inputFilters, status: e.target.value })}
           >
             <option value="">Buy / Rent</option>
             <option value="sale">Sale</option>
             <option value="rent">Rent</option>
           </select>
           <button
-            onClick={() => setPage(1)}
+            onClick={handleSearch}
             className="bg-black text-white px-6 py-2 rounded-lg text-sm"
           >
             Search
@@ -83,8 +97,13 @@ export default function Listings() {
       {/* Results */}
       <div className="max-w-6xl mx-auto px-6 py-12">
         <p className="text-sm text-gray-500 mb-6">{count} properties found</p>
+
         {loading ? (
-          <p>Loading...</p>
+          <p className="text-center text-gray-400 py-20">Loading...</p>
+        ) : properties.length === 0 ? (
+          <p className="text-center text-gray-400 py-20">
+            No properties found.
+          </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {properties.map((p) => (
@@ -98,19 +117,21 @@ export default function Listings() {
           <button
             disabled={page === 1}
             onClick={() => setPage((p) => p - 1)}
-            className="px-4 py-2 border rounded-lg disabled:opacity-40"
+            className="px-4 py-2 border rounded-lg disabled:opacity-40 hover:bg-gray-50 transition"
           >
             Previous
           </button>
+          <span className="px-4 py-2 text-sm text-gray-500">Page {page}</span>
           <button
             disabled={count <= page * 12}
             onClick={() => setPage((p) => p + 1)}
-            className="px-4 py-2 border rounded-lg disabled:opacity-40"
+            className="px-4 py-2 border rounded-lg disabled:opacity-40 hover:bg-gray-50 transition"
           >
             Next
           </button>
         </div>
       </div>
+
       <Footer />
     </div>
   );
