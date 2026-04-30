@@ -32,8 +32,8 @@ export default function Listings() {
         ...Object.fromEntries(Object.entries(appliedFilters).filter(([, v]) => v)),
       };
       const { data } = await api.get("/properties/", { params });
-      setProperties(data.results);
-      setCount(data.count);
+      setProperties(data.results || data);
+      setCount(data.count || data.length);
     } catch (err) {
       console.error(err);
     } finally {

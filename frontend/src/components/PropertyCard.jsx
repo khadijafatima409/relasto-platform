@@ -4,7 +4,7 @@ export default function PropertyCard({ property }) {
   return (
     <div className="border rounded-xl overflow-hidden hover:shadow-lg transition">
       <img
-        src={property.primary_image || "https://placehold.co/400x250"}
+        src={property.primary_image || "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=800"}
         alt={property.title}
         className="w-full h-48 object-cover"
       />

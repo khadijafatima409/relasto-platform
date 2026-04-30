@@ -20,12 +20,13 @@ export default function Register() {
       await api.post("/auth/register/", {
         email: form.email,
         username: form.username,
-        password: form.password
+        password: form.password,
+        password2: form.confirmPassword
       });
       alert("Registration successful! Please login.");
       navigate("/login");
     } catch (err) {
-      setError("Registration failed. Email or username might already exist.");
+      setError("Registration failed. Please check your details and try again.");
     } finally {
       setLoading(false);
     }

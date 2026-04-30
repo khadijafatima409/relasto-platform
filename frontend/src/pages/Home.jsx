@@ -5,7 +5,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import PropertyCard from "../components/PropertyCard";
 import heroImg from "../assets/hero.png";
-import img1 from "../assets/img_image.png";
 
 export default function Home() {
   const [featuredProperties, setFeaturedProperties] = useState([]);
@@ -22,7 +21,8 @@ export default function Home() {
     api
       .get("/properties/", { params: { limit: 6 } })
       .then(({ data }) => {
-        setFeaturedProperties(data.results.slice(0, 6)); // Ensure max 6
+        const results = data.results || data;
+        setFeaturedProperties(results.slice(0, 6)); // Ensure max 6
         setLoading(false);
       })
       .catch((err) => {
@@ -98,8 +98,8 @@ export default function Home() {
         </div>
         <div className="relative hidden lg:block">
           <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-orange-100 rounded-full -z-10 blur-3xl opacity-50"></div>
-          {/* using img1 for placeholder if hero isn't a house */}
-          <img src={img1} alt="House" className="w-full h-auto object-cover rounded-3xl" />
+          {/* using Unsplash for placeholder if hero isn't a house */}
+          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1000" alt="House" className="w-full h-auto object-cover rounded-3xl" />
         </div>
       </section>
 
@@ -193,10 +193,10 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-2 gap-4">
            {/* Placeholder for the collage */}
-           <img src={img1} alt="House 1" className="w-full h-48 object-cover rounded-xl" />
-           <img src={img1} alt="House 2" className="w-full h-48 object-cover rounded-xl mt-8" />
-           <img src={img1} alt="House 3" className="w-full h-48 object-cover rounded-xl" />
-           <img src={img1} alt="House 4" className="w-full h-48 object-cover rounded-xl mt-8" />
+           <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=500" alt="House 1" className="w-full h-48 object-cover rounded-xl shadow-sm" />
+           <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=500" alt="House 2" className="w-full h-48 object-cover rounded-xl mt-8 shadow-sm" />
+           <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=500" alt="House 3" className="w-full h-48 object-cover rounded-xl shadow-sm" />
+           <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=500" alt="House 4" className="w-full h-48 object-cover rounded-xl mt-8 shadow-sm" />
         </div>
       </section>
 
@@ -204,7 +204,7 @@ export default function Home() {
       <section className="py-20 px-6 lg:px-20 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div className="relative">
           <div className="w-full h-96 bg-orange-500 rounded-3xl absolute -z-10 translate-x-4 translate-y-4"></div>
-          <img src={img1} alt="House Exterior" className="w-full h-96 object-cover rounded-3xl shadow-xl" />
+          <img src="https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&q=80&w=800" alt="House Exterior" className="w-full h-96 object-cover rounded-3xl shadow-xl" />
         </div>
         <div>
           <h2 className="text-3xl font-bold mb-6">Best rated host on popular rental sites</h2>
@@ -219,9 +219,9 @@ export default function Home() {
           <button className="bg-black text-white px-6 py-3 rounded-lg text-sm font-medium mb-12">Learn more</button>
           
           <div className="pt-8 border-t border-gray-100 flex gap-6 items-center">
-            <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden shrink-0">
+            <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden shrink-0 shadow-sm border-2 border-white">
                {/* Avatar */}
-               <div className="w-full h-full bg-gray-300"></div>
+               <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100" alt="Taylor Wilson" className="w-full h-full object-cover" />
             </div>
             <div>
               <h4 className="font-bold">Taylor Wilson</h4>
@@ -246,13 +246,13 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "9 Easy-to-Ambitious DIY Projects to Improve Your Home" },
-              { title: "Serie Shophouse Launch In July, Opportunity For Investors" },
-              { title: "Looking for a New Place? Use This Time to Create Your Wishlist" }
+              { img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=500", title: "9 Easy-to-Ambitious DIY Projects to Improve Your Home" },
+              { img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=500", title: "Serie Shophouse Launch In July, Opportunity For Investors" },
+              { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=500", title: "Looking for a New Place? Use This Time to Create Your Wishlist" }
             ].map((article, i) => (
               <div key={i} className="group cursor-pointer">
-                <img src={img1} alt={article.title} className="w-full h-64 object-cover rounded-2xl mb-6 group-hover:opacity-90 transition" />
-                <h3 className="font-bold text-xl mb-4 group-hover:text-orange-400 transition">{article.title}</h3>
+                <img src={article.img} alt={article.title} className="w-full h-64 object-cover rounded-2xl mb-6 group-hover:opacity-90 transition shadow-md" />
+                <h3 className="font-bold text-xl mb-4 group-hover:text-orange-400 transition leading-snug">{article.title}</h3>
                 <span className="text-orange-500 text-sm font-medium flex items-center gap-1">Read the Article &rarr;</span>
               </div>
             ))}

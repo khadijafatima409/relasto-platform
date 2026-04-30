@@ -4,7 +4,6 @@ import api from "../api/axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import PropertyCard from "../components/PropertyCard";
-import img1 from "../assets/img_image.png";
 
 export default function AgentProfile() {
   const { id } = useParams();
@@ -68,14 +67,14 @@ export default function AgentProfile() {
       
       {/* Banner & Header */}
       <div className="relative h-64 lg:h-80 w-full overflow-hidden">
-         <img src={img1} alt="Banner" className="w-full h-full object-cover" />
+         <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&q=80&w=2000" alt="Banner" className="w-full h-full object-cover" />
          <div className="absolute inset-0 bg-black bg-opacity-20"></div>
       </div>
 
       <div className="max-w-5xl mx-auto px-6 relative -mt-16 sm:-mt-24 mb-12">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col sm:flex-row items-center sm:items-start gap-6">
            <img 
-              src={agent.profile?.avatar || img1} 
+              src={agent.profile?.avatar || "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256"} 
               alt={agent.username} 
               className="w-32 h-32 rounded-2xl object-cover shadow-md border-4 border-white shrink-0"
            />
